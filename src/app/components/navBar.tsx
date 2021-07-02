@@ -1,6 +1,10 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/reducers";
 
 const NavBar = () => {
+  const { totalItems } = useSelector((state: RootState) => state.counters);
+
   return (
     <div>
       <nav
@@ -12,6 +16,7 @@ const NavBar = () => {
             Navbar
           </a>
         </div>
+        <div>{totalItems}</div>
       </nav>
     </div>
   );

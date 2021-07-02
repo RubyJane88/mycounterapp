@@ -1,5 +1,5 @@
 import { counterNamespace, CounterStateType } from "./counterType";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
 import { CounterModel } from "../models/CounterModel";
 
 export const initialState: CounterStateType = {
@@ -11,6 +11,7 @@ export const initialState: CounterStateType = {
     { id: 5, value: 0 },
   ],
   loading: false,
+  totalItems: 0,
 };
 
 export const counterSlice = createSlice({
@@ -23,15 +24,21 @@ export const counterSlice = createSlice({
       // console.log("action payload", action.payload);
       const index = state.counters.findIndex((c) => c.id === action.payload.id);
       state.counters[index].value++;
+      syncTotalValues(state);
+      // state.totalItems = state.counters.reduce((a, b) => a + b.value, 0);
     },
 
     counterDecrementAction: (state, action: PayloadAction<CounterModel>) => {
       const index = state.counters.findIndex((c) => c.id === action.payload.id);
       state.counters[index].value--;
+      syncTotalValues(state);
+      // state.totalItems = state.counters.reduce((a, b) => a + b.value, 0);
     },
 
     counterDeleteAction: (state, action: PayloadAction<CounterModel>) => {
       state.counters = state.counters.filter((c) => c.id !== action.payload.id);
+      syncTotalValues(state);
+      // state.totalItems = state.counters.reduce((a, b) => a + b.value, 0);
     },
 
     resetBarAction: (state, action: PayloadAction) => {
@@ -39,6 +46,8 @@ export const counterSlice = createSlice({
         counter.value = 0;
         return counter;
       });
+      syncTotalValues(state);
+      // state.totalItems = state.counters.reduce((a, b) => a + b.value, 0);
     },
   },
 
@@ -53,3 +62,9 @@ export const {
 } = counterSlice.actions;
 
 export default counterSlice.reducer;
+
+const syncTotalValues = (state: Draft<any>) =>
+  (state.totalItems = state.counters.reduce(
+    (a: any, b: CounterModel) => a + b.value,
+    0
+  ));

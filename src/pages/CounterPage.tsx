@@ -29,13 +29,18 @@ const CounterPage = () => {
             </div>
             <button
               className="btn btn-secondary btn-sm m-2"
-              onClick={() => dispatch(counterIncrementAction(counter))}
+              onClick={() => {
+                dispatch(counterIncrementAction(counter));
+              }}
             >
               +
             </button>
+
             <button
-              onClick={() => dispatch(counterDecrementAction(counter))}
               className="btn btn-secondary btn-sm m-2"
+              onClick={() => {
+                dispatch(counterDecrementAction(counter));
+              }}
               disabled={!counter.value}
             >
               -
